@@ -1,33 +1,20 @@
 "use client";
 import { Input } from "@/components/Input";
+import { SelectCity } from "@/components/SelectCity";
+import { CityProps } from "@/services/getCityByNameService";
 import axios from "axios";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function Page() {
-  const [city, setCity] = useState("");
-  const [weather, setWeather] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=manchester&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}`;
-
-  function handleSearchWeatherApi(e: any) {
-    e.preventDefault();
-    setIsLoading(true);
-
-    axios.get(url).then((response) => {
-      setWeather(response.data);
-      console.log(response.data);
-    });
-    setCity("");
-    setIsLoading(false);
+  function handleSelected(city: CityProps) {
+    localStorage.setItem("@typeweather:city", JSON.stringify(city));
   }
 
   return (
     <div className="w-full h-screen bg-[#13131a]">
-      <div className="py-8">
-        <h1 className="text-center text-2xl text-gray-100 font-nunito">
-          <strong className="text-blue-300">TypeWeather</strong>
-        </h1>
+      <div className="py-8 flex justify-center">
+        <Image src="/logo.png" width={186} height={32} quality={100} alt={""} />
       </div>
       <div className="mt-72">
         <p className="text-gray-200 text-center text-5xl">
@@ -38,7 +25,7 @@ export default function Page() {
         </p>
       </div>
       <div>
-        <Input isLoading={false} />
+        <SelectCity onSelect={handleSelected} />
       </div>
     </div>
   );
